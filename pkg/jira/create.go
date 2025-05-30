@@ -32,6 +32,7 @@ type CreateRequest struct {
 	Priority         string
 	Labels           []string
 	Components       []string
+	ComponentIDs     []string
 	FixVersions      []string
 	AffectsVersions  []string
 	OriginalEstimate string
@@ -183,12 +184,28 @@ func (*Client) getRequestData(req *CreateRequest) *createRequest {
 	if len(req.Components) > 0 {
 		comps := make([]struct {
 			Name string `json:"name,omitempty"`
+			ID   string `json:"id,omitempty"`
 		}, 0, len(req.Components))
 
 		for _, c := range req.Components {
 			comps = append(comps, struct {
 				Name string `json:"name,omitempty"`
-			}{c})
+				ID   string `json:"id,omitempty"`
+			}{c, ""})
+		}
+		data.Fields.M.Components = comps
+	}
+	if len(req.ComponentIDs) > 0 {
+		comps := make([]struct {
+			Name string `json:"name,omitempty"`
+			ID   string `json:"id,omitempty"`
+		}, 0, len(req.Components))
+
+		for _, c := range req.ComponentIDs {
+			comps = append(comps, struct {
+				Name string `json:"name,omitempty"`
+				ID   string `json:"id,omitempty"`
+			}{"", c})
 		}
 		data.Fields.M.Components = comps
 	}
@@ -303,6 +320,7 @@ type createFields struct {
 	Labels     []string `json:"labels,omitempty"`
 	Components []struct {
 		Name string `json:"name,omitempty"`
+		ID   string `json:"id,omitempty"`
 	} `json:"components,omitempty"`
 	FixVersions []struct {
 		Name string `json:"name,omitempty"`

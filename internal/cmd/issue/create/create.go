@@ -101,6 +101,10 @@ func create(cmd *cobra.Command, _ []string) {
 		cmdutil.ExitIfError(err)
 	}
 
+	if len(params.Components) > 0 && len(params.ComponentIDs) > 0 {
+		cmdutil.Failed("Both --component and --component-id are provided. Please use only one of them.")
+	}
+
 	params.Reporter = cmdcommon.GetRelevantUser(client, project, params.Reporter)
 	params.Assignee = cmdcommon.GetRelevantUser(client, project, params.Assignee)
 
@@ -119,6 +123,7 @@ func create(cmd *cobra.Command, _ []string) {
 			Priority:         params.Priority,
 			Labels:           params.Labels,
 			Components:       params.Components,
+			ComponentIDs:     params.ComponentIDs,
 			FixVersions:      params.FixVersions,
 			AffectsVersions:  params.AffectsVersions,
 			OriginalEstimate: params.OriginalEstimate,
@@ -358,6 +363,9 @@ func parseFlags(flags query.FlagParser) *cmdcommon.CreateParams {
 	components, err := flags.GetStringArray("component")
 	cmdutil.ExitIfError(err)
 
+	componentIDs, err := flags.GetStringArray("component-id")
+	cmdutil.ExitIfError(err)
+
 	fixVersions, err := flags.GetStringArray("fix-version")
 	cmdutil.ExitIfError(err)
 
@@ -389,6 +397,7 @@ func parseFlags(flags query.FlagParser) *cmdcommon.CreateParams {
 		Labels:           labels,
 		Reporter:         reporter,
 		Components:       components,
+		ComponentIDs:     componentIDs,
 		FixVersions:      fixVersions,
 		AffectsVersions:  affectsVersions,
 		OriginalEstimate: originalEstimate,

@@ -33,6 +33,7 @@ type CreateParams struct {
 	Assignee         string
 	Labels           []string
 	Components       []string
+	ComponentIDs     []string
 	FixVersions      []string
 	AffectsVersions  []string
 	OriginalEstimate string
@@ -62,6 +63,7 @@ And, this field is mandatory when creating a sub-task.`)
 	cmd.Flags().StringP("assignee", "a", "", prefix+" assignee (username, email or display name)")
 	cmd.Flags().StringArrayP("label", "l", []string{}, prefix+" labels")
 	cmd.Flags().StringArrayP("component", "C", []string{}, prefix+" components")
+	cmd.Flags().StringArray("component-id", []string{}, prefix+" components-id")
 	cmd.Flags().StringArray("fix-version", []string{}, "Release info (fixVersions)")
 	cmd.Flags().StringArray("affects-version", []string{}, "Release info (affectsVersions)")
 	cmd.Flags().StringP("original-estimate", "e", "", prefix+" Original estimate")
